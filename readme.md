@@ -1,6 +1,6 @@
-# C/C++ class generator.
+# C/C++ class generator
 
-This is a simple script that allows me to generates a C++ class and place it in the
+This is a simple script that allows me to generate a C++ class and place it in the
 correct location for successful compilation.
 
 ### Usage
