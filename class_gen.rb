@@ -52,10 +52,13 @@ source_fh.close
 
 if Dir.exist? "#{include_dir}/#{namespace}"
   FileUtils.cp(header_file, "#{include_dir}/#{namespace}")
+  FileUtils.cp(source_file, "#{source_dir}")
 else
   puts "Dir Doesn't 'Exist, creating it..."
   FileUtils.mkdir_p("#{include_dir}/#{namespace}")
+  FileUtils.mkdir_p("#{source_dir}")
   FileUtils.cp(header_file, "#{include_dir}/#{namespace}")
+  FileUtils.cp(source_file, "#{source_dir}")
   puts "Created."
 end
 
