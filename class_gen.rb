@@ -2,6 +2,8 @@
 
 require 'fileutils'
 
+puts dirname = File.basename(Dir.getwd)
+
 namespace = ARGV[0]
 classname = ARGV[1]
 
@@ -45,15 +47,20 @@ source_fh = File.open(source_file, "w")
 header_fh.write(header_contents)
 source_fh.write(source_contents)
 
-
+header_fh.close
+source_fh.close
 
 if Dir.exist? "#{include_dir}/#{namespace}"
   FileUtils.cp(header_file, "#{include_dir}/#{namespace}")
 else
   puts "Dir Doesn't 'Exist, creating it..."
   FileUtils.mkdir_p("#{include_dir}/#{namespace}")
+  FileUtils.cp(header_file, "#{include_dir}/#{namespace}")
   puts "Created."
 end
+
+FileUtils.rm header_file
+FileUtils.rm source_file
 
 puts "#{include_dir}/#{namespace}/#{header_file}"
 #FileUtils.cp(header_file, "#{include_dir}/#{namespace}/#{header_file}" )
