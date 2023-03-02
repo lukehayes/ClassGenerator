@@ -30,8 +30,6 @@ source_fh = File.open("#{template_dir}/#{source_template}", "r+")
 header_fh.read(nil, out_string = header_contents)
 source_fh.read(nil, out_string = source_contents)
 
-header_fh.each do |x| p x end
-
 header_fh.close
 source_fh.close
 
@@ -52,22 +50,24 @@ source_fh.close
 
 if Dir.exist? "#{include_dir}/#{namespace}"
   FileUtils.cp(header_file, "#{include_dir}/#{namespace}")
+else
+  puts "Directory: #{include_dir}/ dir doesn't rxist, creating it..."
+  FileUtils.mkdir_p("#{include_dir}/#{namespace}")
+  FileUtils.cp(header_file, "#{include_dir}/#{namespace}")
+  puts "#{include_dir}/ Created."
+end
+
+if Dir.exist? "#{source_dir}"
   FileUtils.cp(source_file, "#{source_dir}")
 else
-  puts "Dir Doesn't 'Exist, creating it..."
-  FileUtils.mkdir_p("#{include_dir}/#{namespace}")
+  puts "Directory: #{source_dir}/ dir doesn't rxist, creating it..."
   FileUtils.mkdir_p("#{source_dir}")
-  FileUtils.cp(header_file, "#{include_dir}/#{namespace}")
   FileUtils.cp(source_file, "#{source_dir}")
-  puts "Created."
+  puts "#{source_dir}/ Created."
 end
 
 FileUtils.rm header_file
 FileUtils.rm source_file
-
-puts "#{include_dir}/#{namespace}/#{header_file}"
-#FileUtils.cp(header_file, "#{include_dir}/#{namespace}/#{header_file}" )
-#FileUtils.cp(source_file, "#{source_dir}/#{source_file}" )
 
 puts "Created #{namespace}::#{classname} class."
 
