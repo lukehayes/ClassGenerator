@@ -3,6 +3,9 @@
 require 'fileutils'
 
 dirname = __dir__
+current_dir = Dir.pwd + "/.."
+
+puts current_dir
 
 #------------------------------------------------------------
 # Define the header and source files.
@@ -30,10 +33,10 @@ namespace @1 {
 }
 HEREDOC
 
-if dirname == "build"
+if current_dir == "build"
   puts "In build dir."
-  include_dir     = "../#{dirname}/include"
-  source_dir      = "../#{dirname}/src"
+  include_dir     = "#{dirname}/include"
+  source_dir      = "#{dirname}/src"
 else
   puts "In main dir."
   include_dir     = "include"
@@ -43,8 +46,16 @@ end
 #------------------------------------------------------------
 # Get args from command line.
 #------------------------------------------------------------
+
+if ARGV.empty?
+  puts "First argument should be a namespace."
+  puts "Second should be the classname"
+  exit
+end
+
 namespace = ARGV[0]
 classname = ARGV[1]
+
 
 #------------------------------------------------------------
 # Replace the "tags" with namespace and classname.
@@ -79,12 +90,12 @@ else
   puts "#{include_dir}/ Created."
 end
 
-if Dir.exist? "#{source_dir}"
+if Dir.exist? "#{dirname}/#{source_dir}"
   FileUtils.cp(source_file, "#{source_dir}")
 else
   puts "Directory: #{source_dir}/ dir doesn't exist, creating it..."
-  FileUtils.mkdir_p("#{dirname}/#{source_dir}")
-  FileUtils.cp(source_file, "#{source_dir}")
+  FileUtils.mkdir("#{dirname}/#{source_dir}")
+  FileUtils.cp(source_file, "#{dirname}/#{source_dir}")
   puts "#{source_dir}/ Created."
 end
 
