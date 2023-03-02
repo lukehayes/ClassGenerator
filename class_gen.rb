@@ -2,48 +2,70 @@
 
 require 'fileutils'
 
-puts dirname = File.basename(Dir.getwd)
+dirname = __dir__
 
+#------------------------------------------------------------
+# Define the header and source files.
+#------------------------------------------------------------
+header_template = <<HEREDOC
+#pragma once
+
+namespace @1 {
+
+    class @2
+    {
+    public:
+        @2();
+        ~@2();
+    };
+}
+HEREDOC
+
+source_template = <<HEREDOC
+#include "@1/@2.h"
+
+namespace @1 {
+    @2::@2() {}
+    @2::~@2() {}
+}
+HEREDOC
+
+if dirname == "build"
+  puts "In build dir."
+  include_dir     = "../#{dirname}/include"
+  source_dir      = "../#{dirname}/src"
+else
+  puts "In main dir."
+  include_dir     = "include"
+  source_dir      = "src"
+end
+
+#------------------------------------------------------------
+# Get args from command line.
+#------------------------------------------------------------
 namespace = ARGV[0]
 classname = ARGV[1]
 
-template_dir    = "templates"
-include_dir     = "include"
-source_dir      = "src"
+#------------------------------------------------------------
+# Replace the "tags" with namespace and classname.
+#------------------------------------------------------------
+puts header_template
+header_template.gsub!("@1", namespace)
+header_template.gsub!("@2", classname)
+source_template.gsub!("@1", namespace)
+source_template.gsub!("@2", classname)
 
-
-header_template = "header.h"
-source_template = "source.cpp"
-
+#------------------------------------------------------------
+# Create new templace files and write new template.
+#------------------------------------------------------------
 header_file = "#{classname}.h"
 source_file = "#{classname}.cpp"
-
-header_contents = ""
-source_contents = ""
-
-FileUtils.cp("#{template_dir}/#{header_template}", header_file)
-FileUtils.cp("#{template_dir}/#{source_template}", source_file)
-
-header_fh = File.open("#{template_dir}/#{header_template}", "r+")
-source_fh = File.open("#{template_dir}/#{source_template}", "r+")
-
-header_fh.read(nil, out_string = header_contents)
-source_fh.read(nil, out_string = source_contents)
-
-header_fh.close
-source_fh.close
-
-header_contents.gsub!("@1", namespace)
-header_contents.gsub!("@2", classname)
-
-source_contents.gsub!("@1", namespace)
-source_contents.gsub!("@2", classname)
 
 header_fh = File.open(header_file, "w")
 source_fh = File.open(source_file, "w")
 
-header_fh.write(header_contents)
-source_fh.write(source_contents)
+header_fh.write(header_template)
+source_fh.write(source_template)
 
 header_fh.close
 source_fh.close
@@ -51,8 +73,8 @@ source_fh.close
 if Dir.exist? "#{include_dir}/#{namespace}"
   FileUtils.cp(header_file, "#{include_dir}/#{namespace}")
 else
-  puts "Directory: #{include_dir}/ dir doesn't rxist, creating it..."
-  FileUtils.mkdir_p("#{include_dir}/#{namespace}")
+  puts "Directory: #{include_dir}/ dir doesn't exist, creating it..."
+  FileUtils.mkdir_p("#{dirname}/#{include_dir}/#{namespace}")
   FileUtils.cp(header_file, "#{include_dir}/#{namespace}")
   puts "#{include_dir}/ Created."
 end
@@ -60,8 +82,8 @@ end
 if Dir.exist? "#{source_dir}"
   FileUtils.cp(source_file, "#{source_dir}")
 else
-  puts "Directory: #{source_dir}/ dir doesn't rxist, creating it..."
-  FileUtils.mkdir_p("#{source_dir}")
+  puts "Directory: #{source_dir}/ dir doesn't exist, creating it..."
+  FileUtils.mkdir_p("#{dirname}/#{source_dir}")
   FileUtils.cp(source_file, "#{source_dir}")
   puts "#{source_dir}/ Created."
 end
