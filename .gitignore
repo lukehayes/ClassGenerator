@@ -152,5 +152,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+include/
+src/
+
 # End of https://www.toptal.com/developers/gitignore/api/ruby,linux,windows,macos,vim
 
