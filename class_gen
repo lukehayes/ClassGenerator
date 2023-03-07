@@ -5,6 +5,7 @@ require 'fileutils'
 dirname = __dir__
 current_dir = Dir.pwd
 
+
 puts "----------------------------------------------------------"
 puts "Script located in: #{dirname}"
 puts "Script running from: #{current_dir}"
@@ -100,7 +101,7 @@ source_fh.write(source_template)
 header_fh.close
 source_fh.close
 
-header_destination = "#{include_dir}/"
+header_destination = "#{include_dir}/#{namespace.downcase}"
 source_destination = "#{source_dir}/"
 
 if Dir.exist? header_destination
