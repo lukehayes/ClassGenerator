@@ -19,7 +19,7 @@ namespace @1 {
         @2();
         @2(const @2& other);
         @2(@2&& other);
-        @2& operator=(const @& other);
+        @2& operator=(const @2& other);
         @2& operator=(@2&& other);
         ~@2();
     };
@@ -32,19 +32,21 @@ source_template = <<HEREDOC
 namespace @1 {
     @2::@2() {}
 
-    @2(const @2& other) {}
+    @2::@2(const @2& other) {}
 
-    @2(@2&& other) {}
+    @2::@2(@2&& other) {}
 
-    @2& operator=(@2&& other)
+    @2&
+    @2::operator=(@2&& other)
     {
-      if(this == *other) return *this;
+      if(this == &other) return *this;
       return *this;
     }
 
-    @2& operator=(const @2& other)
+    @2&
+    @2::operator=(const @2& other)
     {
-      if(this == *other) return *this;
+      if(this == &other) return *this;
       return *this;
     }
     @2::~@2() {}
