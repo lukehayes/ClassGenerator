@@ -5,6 +5,12 @@ require 'fileutils'
 dirname = __dir__
 current_dir = Dir.pwd
 
+puts "----------------------------------------------------------"
+puts "Script located in: #{dirname}"
+puts "Script running from: #{current_dir}"
+puts "----------------------------------------------------------"
+puts ""
+
 #------------------------------------------------------------
 # Define the header and source files.
 #------------------------------------------------------------
@@ -53,16 +59,16 @@ namespace @1 {
 }
 HEREDOC
 
-include_dir     = "#{dirname}/include"
-source_dir      = "#{dirname}/src"
+include_dir     = "#{current_dir}/include"
+source_dir      = "#{current_dir}/src"
 
 #------------------------------------------------------------
 # Get args from command line.
 #------------------------------------------------------------
-
-if ARGV.empty?
+if ARGV.length < 2
+  puts "I am missing some arguments..."
   puts "First argument should be a namespace."
-  puts "Second should be the classname"
+  puts "Second should be the classname."
   exit
 end
 
@@ -73,7 +79,6 @@ classname = ARGV[1]
 #------------------------------------------------------------
 # Replace the "tags" with namespace and classname.
 #------------------------------------------------------------
-puts header_template
 header_template.gsub!("@1", namespace)
 header_template.gsub!("@2", classname)
 source_template.gsub!("@1", namespace)
@@ -95,17 +100,14 @@ source_fh.write(source_template)
 header_fh.close
 source_fh.close
 
-header_destination = "#{include_dir}/#{namespace}"
+header_destination = "#{include_dir}/"
 source_destination = "#{source_dir}/"
-
-p header_destination
-p source_destination
 
 if Dir.exist? header_destination
   FileUtils.cp(header_file, header_destination)
 else
-  puts "Directory: #{header_destination}/ dir doesn't exist, creating it..."
-  FileUtils.mkdir_p("#{header_destination}/#{namespace}")
+  puts "Directory: #{header_destination} dir doesn't exist, creating it..."
+  FileUtils.mkdir_p("#{header_destination}")
   FileUtils.cp(header_file, header_destination)
   puts "#{include_dir}/ Created."
 end
