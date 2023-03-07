@@ -27,7 +27,7 @@ namespace @1 {
 HEREDOC
 
 source_template = <<HEREDOC
-#include "@1/@2.h"
+#include "@3/@2.h"
 
 namespace @1 {
     @2::@2() {}
@@ -78,6 +78,7 @@ header_template.gsub!("@1", namespace)
 header_template.gsub!("@2", classname)
 source_template.gsub!("@1", namespace)
 source_template.gsub!("@2", classname)
+source_template.gsub!("@3", namespace.downcase)
 
 #------------------------------------------------------------
 # Create new template files and write to them.
