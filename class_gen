@@ -2,9 +2,28 @@
 
 require 'fileutils'
 
+#------------------------------------------------------------
+# Get args from command line.
+#------------------------------------------------------------
+if ARGV.length < 2
+  # Check if we have the correct number of arguments
+  # exit the script if we don't.
+
+  puts "I am missing some arguments..."
+  puts "First argument should be a namespace."
+  puts "Second should be the classname."
+  exit
+end
+
+namespace = ARGV[0]
+classname = ARGV[1]
+
+#------------------------------------------------------------
+# Get the location the script is running from and the
+# directory that we are curently in.
+#------------------------------------------------------------
 dirname = __dir__
 current_dir = Dir.pwd
-
 
 puts "----------------------------------------------------------"
 puts "Script located in: #{dirname}"
@@ -62,19 +81,6 @@ HEREDOC
 
 include_dir     = "#{current_dir}/include"
 source_dir      = "#{current_dir}/src"
-
-#------------------------------------------------------------
-# Get args from command line.
-#------------------------------------------------------------
-if ARGV.length < 2
-  puts "I am missing some arguments..."
-  puts "First argument should be a namespace."
-  puts "Second should be the classname."
-  exit
-end
-
-namespace = ARGV[0]
-classname = ARGV[1]
 
 
 #------------------------------------------------------------
